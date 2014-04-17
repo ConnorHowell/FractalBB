@@ -2,56 +2,56 @@
 
 class Admin extends CI_Controller {
 
-	public function __construct()
+	public function __construct() //Constructor to load in all functions
        {
             parent::__construct();
-            require 'application/third_party/SampQuery.class.php';
-            require('application/third_party/SampRcon.class.php'); 
+            require 'application/third_party/SampQuery.class.php'; //Includes the class to query SA:MP servers
+            require('application/third_party/SampRcon.class.php'); //Includes the class to remote control SA:MP servers using RCON
        }
 
-	public function index()
+	public function index() //Main page
 	{
-		$query = new SampQuery($this->config->item('server_ip'), $this->config->item('server_port')); 
-		$rcon = new SampRcon($this->config->item('server_ip'), $this->config->item('server_port'), $this->config->item('rcon_password')); 
-		$blogquery = $this->db->query("SELECT * FROM `posts` LIMIT 0, 5");
-		$datestring = "%Y";
+		$query = new SampQuery($this->config->item('server_ip'), $this->config->item('server_port')); //Create a query connection to the server
+		$rcon = new SampRcon($this->config->item('server_ip'), $this->config->item('server_port'), $this->config->item('rcon_password')); //Creates an RCON connection to the server
+		$blogquery = $this->db->query("SELECT * FROM `posts` LIMIT 0, 5"); //Get the 5 latest posts
+		$datestring = "%Y"; //Format the date
 		$data = array(
-            'blog_title' => $this->config->item('site_title'),
-            'blog_heading' => $this->config->item('site_heading'),
-            'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
-            'page_name' => 'Dashboard',
-            'year' => mdate($datestring).' | Powered by FractalBB',
-            'userdata' => $this->user_model->getDetails(get_cookie('token')),
-            'latest_posts' => $blogquery->result_array(),
-            'players' => $query->getDetailedPlayers()
+            'blog_title' => $this->config->item('site_title'), //Parse the site title
+            'blog_heading' => $this->config->item('site_heading'), //Parse the site heading
+            'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/', //Parse the URL to the template
+            'page_name' => 'Dashboard', //Give the page name to the template
+            'year' => mdate($datestring).' | Powered by FractalBB', //Parse the date in Year format + FractalBB branding
+            'userdata' => $this->user_model->getDetails(get_cookie('token')), //Parse user data in the form of an array
+            'latest_posts' => $blogquery->result_array(), //Parse the latest posts in the form of an array
+            'players' => $query->getDetailedPlayers() //Parse all the details of every player in the server
             );
 
-		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/header',$data);
-		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/index',$data);
-		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data);
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/header',$data); //Initiate the admin 'header' file with all the data above
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/index',$data); //Initiate the admin 'index' file with all the data above
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data); //Initiate the admin 'footer' file with all the data above
 	}
 
-	public function blogposts()
+	public function blogposts() //All blog posts
 	{
-		$query = new SampQuery($this->config->item('server_ip'), $this->config->item('server_port')); 
-		$rcon = new SampRcon($this->config->item('server_ip'), $this->config->item('server_port'), $this->config->item('rcon_password')); 
-		$blogquery = $this->db->query("SELECT * FROM `posts`");
-		$datestring = "%Y";
+		$query = new SampQuery($this->config->item('server_ip'), $this->config->item('server_port')); //Create a query connection to the server
+		$rcon = new SampRcon($this->config->item('server_ip'), $this->config->item('server_port'), $this->config->item('rcon_password')); //Creates an RCON connection to the server
+		$blogquery = $this->db->query("SELECT * FROM `posts`"); //Get all posts
+		$datestring = "%Y"; //Format the date
 		$data = array(
-            'blog_title' => $this->config->item('site_title'),
-            'blog_heading' => $this->config->item('site_heading'),
-            'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
-            'page_name' => 'Blog Posts',
-            'year' => mdate($datestring).' | Powered by FractalBB',
-            'userdata' => $this->user_model->getDetails(get_cookie('token')),
-            'latest_posts' => $blogquery->result_array(),
-            'players' => $query->getDetailedPlayers(),
-            'posts' => $blogquery->result_array() 
+            'blog_title' => $this->config->item('site_title'), //Parse the site title
+            'blog_heading' => $this->config->item('site_heading'), //Parse the site heading
+            'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/', //Parse the URL to the template
+            'page_name' => 'Blog Posts', //Give the page name to the template
+            'year' => mdate($datestring).' | Powered by FractalBB', //Parse the date in Year format + FractalBB branding
+            'userdata' => $this->user_model->getDetails(get_cookie('token')), //Parse user data in the form of an array
+            'latest_posts' => $blogquery->result_array(), //Parse the latest posts in the form of an array
+            'players' => $query->getDetailedPlayers(), //Parse all the details of every player in the server
+            'posts' => $blogquery->result_array() //Parse all the post details
             );
 
-		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/header',$data);
-		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/blogposts',$data);
-		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data);
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/header',$data); //Initiate the admin 'header' file with all the data above
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/blogposts',$data); //Initiate the admin 'blogposts' file with all the data above
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data); //Initiate the admin 'footer' file with all the data above
 	}
 
 	public function categories()
