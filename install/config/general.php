@@ -13,5 +13,8 @@ $config['server_ip'] = '%SERVER_IP%';
 $config['server_port'] = '%SERVER_PORT%';
 $config['rcon_password'] = '%RCON_PASSWORD%';
 
+$config['acc_method'] = 'MySQL';
+$config['acc_enc'] = 'md5';
+
 /* End of file general.php */
 /* Location: ./application/config/general.php */

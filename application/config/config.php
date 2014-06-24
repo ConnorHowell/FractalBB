@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'SET_THIS';
+$config['base_url']	= 'CHANGE THIS';
 
 /*
 |--------------------------------------------------------------------------

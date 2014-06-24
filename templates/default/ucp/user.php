@@ -1,4 +1,3 @@
-{viewing_user}
 <div class="row">
   <div class="col-lg-12">
     <h1>Viewing User <small>{username}</small></h1>
@@ -15,7 +14,7 @@
 	      <div class="panel-heading">
 	        <div class="row">
 	          <div class="col-xs-6">
-	            <img src="http://www.gravatar.com/avatar/{gravatar_hash}?s=90">
+	            <img src="http://www.gravatar.com/avatar/{gravatar_hash}?s=90&d=mm">
 	          </div>
 	          <div class="col-xs-6 text-right">
 	            <p class="announcement-heading">{username}</p>
@@ -71,7 +70,7 @@
                     <i class="fa fa-money fa-5x"></i>
                   </div>
                   <div class="col-xs-6 text-right">
-                    <p class="announcement-heading">${money}</p>
+                    <p class="announcement-heading">${cash}</p>
                     <p class="announcement-text">Money</p>
                   </div>
                 </div>
@@ -88,9 +87,9 @@
           <div class="panel-body">
             <div class="list-group">
             {latest_posts}
-              <a href="<?php echo base_url(); ?>viewpost/{id}" class="list-group-item">
+              <a href="<?php echo base_url(); ?>viewpost/{post_id}" class="list-group-item">
                 <span class="badge">{timestamp}</span>
-                 {title}
+                 {content}
               </a>
             {/latest_posts}
             </div>
@@ -121,4 +120,3 @@
         </div>
       </div>
 </div>
-{/viewing_user}

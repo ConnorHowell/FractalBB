@@ -15,7 +15,7 @@
             </div>
             <div class="panel-body">
 	            <form method="POST" action="<?php echo base_url(); ?>ucp/updatesignature">
-	            	<textarea class="posteditor" id="posteditor" name="posteditor">{userdata}{signature}{/userdata}</textarea>
+	            	<textarea class="posteditor" id="posteditor" name="posteditor">{signature}</textarea>
 	            	<br><button class="btn btn-outline btn-success" type="submit">Save Changes</button>
 	            </form>
             </div>

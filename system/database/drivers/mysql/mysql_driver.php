@@ -182,6 +182,40 @@ class CI_DB_mysql_driver extends CI_DB {
 	// --------------------------------------------------------------------
 
 	/**
+	* ON DUPLICATE UPDATE statement
+	*
+	* Generates a platform-specific on duplicate key update string from the supplied data
+	*
+	* @author    Chris Miller <chrismill03@hotmail.com>
+	* @since     1.6.2
+	* @access    public
+	* @param     string   the table name
+	* @param     array    the update/insert data
+	* @return    string
+	*/
+	function _duplicate_insert($table, $values)
+	{
+	    $updatestr = array();
+	    $keystr    = array();
+	    $valstr    = array();
+	    
+	    foreach($values as $key => $val)
+	    {
+	        $updatestr[] = $key." = ".$val;
+	        $keystr[]    = $key;
+	        $valstr[]    = $val;
+	    }
+	    
+	    $sql  = "INSERT INTO ".$table." (".implode(', ',$keystr).") ";
+	    $sql .= "VALUES (".implode(', ',$valstr).") ";
+	    $sql .= "ON DUPLICATE KEY UPDATE ".implode(', ',$updatestr);
+	    
+	    return $sql;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Prep the query
 	 *
 	 * If needed, each database adapter can prep the query string

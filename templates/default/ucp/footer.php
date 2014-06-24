@@ -11,7 +11,6 @@
         <h4 class="modal-title" id="settingsModalLabel">Settings!</h4>
       </div>
       <div class="modal-body">
-      {userdata}
             <div class="form-group">
                 <label>Username</label>
                 <input class="form-control" type="text" name="username" placeholder="Username" value="{username}" disabled="">
@@ -24,7 +23,6 @@
                 <input class="form-control" type="password" name="newPW" placeholder="New password">
                 <p class="help-block">Enter New Password</p>
             </div>
-        {/userdata}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline btn-default" data-dismiss="modal">Close</button>
@@ -46,3 +44,11 @@
 
   </body>
 </html>
+<!--
+ ______              _        _ _    _       _     
+|  ____|            | |      | | |  | |     | |    
+| |__ _ __ __ _  ___| |_ __ _| | |__| |_   _| |__  
+|  __| '__/ _` |/ __| __/ _` | |  __  | | | | '_ \ 
+| |  | | | (_| | (__| || (_| | | |  | | |_| | |_) |
+|_|  |_|  \__,_|\___|\__\__,_|_|_|  |_|\__,_|_.__/ 
+-->

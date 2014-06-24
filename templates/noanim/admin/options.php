@@ -45,7 +45,7 @@
                             </div>
                             <div class="form-group">
                                 <label>RCON Password</label>
-                                <input class="form-control" type="password" value="{rcon_password}" name="rcon_password" required>
+                                <input class="form-control" type="password" value="{rcon_password}" name="rcon_password">
                                 <p class="help-block">This is required for most admin functions!</p>
                             </div>
                             <button type="submit" class="btn btn-outline btn-success">Update</button>

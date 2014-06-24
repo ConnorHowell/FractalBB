@@ -50,7 +50,7 @@
                     <li><a href="<?php echo base_url(); ?>about">About</a></li>
                     <li><a href="<?php echo base_url(); ?>contact">Contact</a></li>
                     <li><a href="<?php echo base_url(); ?>ucp">UCP</a></li>
-                    <?php if (get_cookie('token') !== FALSE && $userdata[0]['admin'] > 0) {
+                    <?php if (get_cookie('token') !== FALSE && $userdata['Admin'] > 0) {
                         echo '<li><a href="'.base_url().'admin">Admin</a></li>';
                     } ?>
                 </ul>

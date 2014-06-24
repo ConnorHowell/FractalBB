@@ -175,6 +175,11 @@ if (defined('ENVIRONMENT'))
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
+	if (is_dir(BASEPATH.'install/'))
+	{
+		exit('It seems that either you haven\'t run the installation, or that you had forgot to delete the install directory. To fix this run the install <a href="install/">here.</a>');
+	}
+
 
 	// The path to the "application" folder
 	if (is_dir($application_folder))

@@ -5,11 +5,46 @@ class Admin extends CI_Controller {
 	public function __construct() //Constructor to load in all functions
        {
             parent::__construct();
+            if (is_dir('install')) {
+                  die('It seems you haven\'t run the installation script. Or you haven\'t deleted the install directory, you should do so for safety! Please click <a href="../install">here</a> to start the installation process!');
+            }
             require 'application/third_party/SampQuery.class.php'; //Includes the class to query SA:MP servers
             require('application/third_party/SampRcon.class.php'); //Includes the class to remote control SA:MP servers using RCON
        }
 
 	public function index() //Main page
+	{
+		$query = new SampQuery($this->config->item('server_ip'), $this->config->item('server_port')); //Create a query connection to the server
+		$rcon = new SampRcon($this->config->item('server_ip'), $this->config->item('server_port'), $this->config->item('rcon_password')); //Creates an RCON connection to the server
+		$blogquery = $this->db->query("SELECT * FROM `posts` LIMIT 0, 5"); //Get the 5 latest posts
+		$datestring = "%Y"; //Format the date
+
+        $checklist = '<li><i class="fa fa-check fa-li text-success"></i>Change your name from the default!</li>
+                <li><i class="fa fa-check fa-li text-success"></i>Add a site heading!</li>
+                <li><i class="fa fa-check fa-li text-success"></i>Setup the user account hook</li>
+                <li><i class="fa fa-check fa-li text-success"></i>Create your first blog post!</li>
+                <li><i class="fa fa-check fa-li text-success"></i>Setup a forum!</li>
+                <li><i class="fa fa-check fa-li text-success"></i>Install a module.</li>';
+
+        $data = array(
+            'blog_title' => $this->config->item('site_title'), //Parse the site title
+            'blog_heading' => $this->config->item('site_heading'), //Parse the site heading
+            'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/', //Parse the URL to the template
+            'page_name' => 'Dashboard', //Give the page name to the template
+            'year' => mdate($datestring).' | Powered by FractalBB', //Parse the date in Year format + FractalBB branding
+            'userdata' => $this->user_model->getDetails(get_cookie('token')), //Parse user data in the form of an array
+            'latest_posts' => $blogquery->result_array(), //Parse the latest posts in the form of an array
+            'players' => $query->getDetailedPlayers(), //Parse all the details of every player in the server
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
+            'checklist' => $checklist //The checklist whether each item has been configured, to avoid in template PHP
+            );
+
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/header',$data); //Initiate the admin 'header' file with all the data above
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/index',$data); //Initiate the admin 'index' file with all the data above
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data); //Initiate the admin 'footer' file with all the data above
+	}
+
+	public function account() //Account hook management
 	{
 		$query = new SampQuery($this->config->item('server_ip'), $this->config->item('server_port')); //Create a query connection to the server
 		$rcon = new SampRcon($this->config->item('server_ip'), $this->config->item('server_port'), $this->config->item('rcon_password')); //Creates an RCON connection to the server
@@ -23,11 +58,20 @@ class Admin extends CI_Controller {
             'year' => mdate($datestring).' | Powered by FractalBB', //Parse the date in Year format + FractalBB branding
             'userdata' => $this->user_model->getDetails(get_cookie('token')), //Parse user data in the form of an array
             'latest_posts' => $blogquery->result_array(), //Parse the latest posts in the form of an array
-            'players' => $query->getDetailedPlayers() //Parse all the details of every player in the server
+            'players' => $query->getDetailedPlayers(), //Parse all the details of every player in the server
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
+            'acc_dir' => $this->config->item('acc_dir'),
+            'pass_tag' => $this->config->item('pass_tag'),
+            'kill_tag' => $this->config->item('kill_tag'),
+            'cash_tag' => $this->config->item('cash_tag'),
+            'ftp_ip' => $this->config->item('ftp_ip'),
+            'ftp_user' => $this->config->item('ftp_user'),
+            'ftp_pass' => $this->config->item('ftp_pass'),
+            'main_tag' => $this->config->item('main_tag')
             );
 
 		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/header',$data); //Initiate the admin 'header' file with all the data above
-		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/index',$data); //Initiate the admin 'index' file with all the data above
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/account_hook',$data); //Initiate the admin 'account_hook' file with all the data above
 		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data); //Initiate the admin 'footer' file with all the data above
 	}
 
@@ -44,6 +88,7 @@ class Admin extends CI_Controller {
             'page_name' => 'Blog Posts', //Give the page name to the template
             'year' => mdate($datestring).' | Powered by FractalBB', //Parse the date in Year format + FractalBB branding
             'userdata' => $this->user_model->getDetails(get_cookie('token')), //Parse user data in the form of an array
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'latest_posts' => $blogquery->result_array(), //Parse the latest posts in the form of an array
             'players' => $query->getDetailedPlayers(), //Parse all the details of every player in the server
             'posts' => $blogquery->result_array() //Parse all the post details
@@ -66,6 +111,7 @@ class Admin extends CI_Controller {
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
             'page_name' => 'Forum Categories',
             'year' => mdate($datestring).' | Powered by FractalBB',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'latest_posts' => $blogquery->result_array(),
             'players' => $query->getDetailedPlayers(),
@@ -99,10 +145,71 @@ class Admin extends CI_Controller {
         $new  = str_replace("%RCON_PASSWORD%",$rcon_password,$new);
         $new  = str_replace("%THEME%",$this->config->item('template'),$new);
 
+        //new additions, FTP and ACC
+
+        $new  = str_replace("%ACC_METHOD%",$this->config->item('acc_method'),$new);
+        $new  = str_replace("%ACC_ENC%",$this->config->item('acc_enc'),$new);
+        $new  = str_replace("%ACC_DIR%",$this->config->item('acc_dir'),$new);
+        $new  = str_replace("%MAIN_TAG%",$this->config->item('main_tag'),$new);
+        $new  = str_replace("%PASS_TAG%",$this->config->item('pass_tag'),$new);
+        $new  = str_replace("%KILL_TAG%",$this->config->item('kill_tag'),$new);
+        $new  = str_replace("%CASH_TAG%",$this->config->item('cash_tag'),$new);
+        $new  = str_replace("%FTP_IP%",$this->config->item('ftp_ip'),$new);
+        $new  = str_replace("%FTP_USER%",$this->config->item('ftp_user'),$new);
+        $new  = str_replace("%FTP_PASS%",$this->config->item('ftp_pass'),$new);
+
+
         $handle = fopen($output_path,'w+');
         @chmod($output_path,0777);
     	fwrite($handle,$new);
     	redirect(base_url().'admin/options', 'refresh');
+    	$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data);
+	}
+
+	public function update_acc()
+	{
+		$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/header',$data);
+
+		$acc_method = $this->input->post('acc_method');
+		$acc_enc = $this->input->post('acc_enc');
+		$acc_dir = $this->input->post('acc_dir');
+		$pass_tag = $this->input->post('pass_tag');
+		$kill_tag = $this->input->post('kill_tag');
+		$cash_tag = $this->input->post('cash_tag');
+		$ftp_ip = $this->input->post('ftp_ip');
+		$ftp_user = $this->input->post('ftp_user');
+		$ftp_pass = $this->input->post('ftp_pass');
+		$main_tag = $this->input->post('main_tag');
+
+        $output_path = 'application/config/general.php';
+        $database_file = read_file('./templates/'.$this->config->item('template').'/admin/config/config.php');
+	
+        $new  = str_replace("%SITE_TITLE%",$this->config->item('site_title'),$database_file);
+        $new  = str_replace("%SITE_HEADING%",$this->config->item('site_heading'),$new);
+        $new  = str_replace("%LICENSE_KEY%",$this->config->item('license_key'),$new);
+        $new  = str_replace("%SERVER_IP%",$this->config->item('server_ip'),$new);
+        $new  = str_replace("%SERVER_PORT%",$this->config->item('server_port'),$new);
+        $new  = str_replace("%RCON_PASSWORD%",$this->config->item('rcon_password'),$new);
+        $new  = str_replace("%THEME%",$this->config->item('template'),$new);
+
+        //new additions, FTP and ACC
+
+        $new  = str_replace("%ACC_METHOD%",$acc_method,$new);
+        $new  = str_replace("%ACC_ENC%",$acc_enc,$new);
+        $new  = str_replace("%ACC_DIR%",$acc_dir,$new);
+        $new  = str_replace("%MAIN_TAG%",$main_tag,$new);
+        $new  = str_replace("%PASS_TAG%",$pass_tag,$new);
+        $new  = str_replace("%KILL_TAG%",$kill_tag,$new);
+        $new  = str_replace("%CASH_TAG%",$cash_tag,$new);
+        $new  = str_replace("%FTP_IP%",$ftp_ip,$new);
+        $new  = str_replace("%FTP_USER%",$ftp_user,$new);
+        $new  = str_replace("%FTP_PASS%",$ftp_pass,$new);
+
+
+        $handle = fopen($output_path,'w+');
+        @chmod($output_path,0777);
+    	fwrite($handle,$new);
+    	redirect(base_url().'admin/account', 'refresh');
     	$this->parser->parse('../../templates/'.$this->config->item('template').'/admin/footer',$data);
 	}
 
@@ -118,6 +225,7 @@ class Admin extends CI_Controller {
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
             'page_name' => 'Viewing Category: '.$id,
             'year' => mdate($datestring).' | Powered by FractalBB',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'latest_posts' => $blogquery->result_array(),
             'players' => $query->getDetailedPlayers(),
@@ -143,6 +251,7 @@ class Admin extends CI_Controller {
             'page_name' => 'Creating Blog Post',
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'latest_posts' => $blogquery->result_array(),
             'players' => $query->getDetailedPlayers(),
             'posts' => $blogquery->result_array() 
@@ -165,6 +274,7 @@ class Admin extends CI_Controller {
             'page_name' => 'Creating Forum',
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'players' => $query->getDetailedPlayers(),
             'id' => $id
             );
@@ -184,6 +294,7 @@ class Admin extends CI_Controller {
             'blog_title' => $this->config->item('site_title'),
             'blog_heading' => $this->config->item('site_heading'),
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'page_name' => 'Forum Posts',
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
@@ -208,6 +319,7 @@ class Admin extends CI_Controller {
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
             'page_name' => 'Forum Topics',
             'year' => mdate($datestring).' | Powered by FractalBB',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'players' => $query->getDetailedPlayers(),
             'posts' => $forumquery->result_array()
@@ -228,6 +340,7 @@ class Admin extends CI_Controller {
             'blog_title' => $this->config->item('site_title'),
             'blog_heading' => $this->config->item('site_heading'),
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'page_name' => 'Creating Forum',
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
@@ -252,6 +365,7 @@ class Admin extends CI_Controller {
             'blog_heading' => $this->config->item('site_heading'),
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
             'page_name' => 'Editing Post',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'players' => $query->getDetailedPlayers(),
@@ -274,6 +388,7 @@ class Admin extends CI_Controller {
             'blog_heading' => $this->config->item('site_heading'),
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
             'page_name' => 'Blog Comments',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'latest_posts' => $blogquery->result_array(),
@@ -297,6 +412,15 @@ class Admin extends CI_Controller {
         $new  = str_replace("%SERVER_IP%",$this->config->item('server_ip'),$new);
         $new  = str_replace("%SERVER_PORT%",$this->config->item('server_port'),$new);
         $new  = str_replace("%RCON_PASSWORD%",$this->config->item('rcon_password'),$new);
+        $new  = str_replace("%ACC_METHOD%",$this->config->item('acc_method'),$new);
+        $new  = str_replace("%ACC_ENC%",$this->config->item('acc_enc'),$new);
+        $new  = str_replace("%ACC_DIR%",$this->config->item('acc_dir'),$new);
+        $new  = str_replace("%PASS_TAG%",$this->config->item('pass_tag'),$new);
+        $new  = str_replace("%KILL_TAG%",$this->config->item('kill_tag'),$new);
+        $new  = str_replace("%CASH_TAG%",$this->config->item('cash_tag'),$new);
+        $new  = str_replace("%FTP_IP%",$this->config->item('ftp_ip'),$new);
+        $new  = str_replace("%FTP_USER%",$this->config->item('ftp_user'),$new);
+        $new  = str_replace("%FTP_PASS%",$this->config->item('ftp_pass'),$new);
         $new  = str_replace("%THEME%",$name,$new);
 
         $handle = fopen($output_path,'w+');
@@ -443,6 +567,7 @@ class Admin extends CI_Controller {
             'latest_posts' => $blogquery->result_array(),
             'players' => $query->getDetailedPlayers(),
             'license_key' => $this->config->item('license_key'),
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'server_ip' => $this->config->item('server_ip'), 
             'server_port' => $this->config->item('server_port'),
             'rcon_password' => $this->config->item('rcon_password')
@@ -466,6 +591,7 @@ class Admin extends CI_Controller {
             'page_name' => 'Theme Options',
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'latest_posts' => $blogquery->result_array(),
             'players' => $query->getDetailedPlayers(),
             'template_list' => directory_map('./templates/', 1),
@@ -490,6 +616,7 @@ class Admin extends CI_Controller {
             'page_name' => 'Viewing Bans',
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'ban_list' => $blogquery->result_array(),
             'players' => $query->getDetailedPlayers()
             );
@@ -509,6 +636,7 @@ class Admin extends CI_Controller {
             'blog_heading' => $this->config->item('site_heading'),
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
             'page_name' => 'Managing Servers',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'players' => $query->getDetailedPlayers(),
@@ -534,6 +662,7 @@ class Admin extends CI_Controller {
             'year' => mdate($datestring).' | Powered by FractalBB',
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'latest_posts' => $blogquery->result_array(),
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'players' => $query->getDetailedPlayers(),
             'module_list' => directory_map('./modules/ucp/', 1),
             );
@@ -555,6 +684,7 @@ class Admin extends CI_Controller {
             'template_dir' => base_url().'templates/'.$this->config->item('template').'/admin/',
             'page_name' => 'UCP Modules',
             'year' => mdate($datestring).' | Powered by FractalBB',
+            'username' => $this->user_model->userFromToken(get_cookie('token')), //Get username using v1.2 method
             'userdata' => $this->user_model->getDetails(get_cookie('token')),
             'latest_posts' => $blogquery->result_array(),
             'players' => $query->getDetailedPlayers(),

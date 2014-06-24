@@ -41,6 +41,7 @@
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 $route['online'] = 'welcome/online';
+$route['logout'] = 'ucp/logout';
 $route['about'] = 'welcome/about';
 $route['contact'] = 'welcome/contact';
 $route['viewpost/(:any)'] = 'welcome/viewpost/$1';

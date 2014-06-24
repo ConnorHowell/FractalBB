@@ -19,6 +19,18 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
+                To-Do List
+            </div>
+            <ul class="fa-ul">
+                {checklist}
+            </ul>
+        </div>
+    </div> 
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
                 Users Online
             </div>
             <!-- /.panel-heading -->
@@ -42,7 +54,7 @@
                                 <td>{score}</td>
                                 <td>{ping}</td>
                                 <td><div class="btn-group">
-                                      <a href="<?php echo base_url(); ?>admin/ban/{playerid}/{userdata}{username}{/userdata}/{nickname}" class="btn btn-xs btn-default">Ban</a>
+                                      <a href="<?php echo base_url(); ?>admin/ban/{playerid}/{username}/{nickname}" class="btn btn-xs btn-default">Ban</a>
                                       <a href="<?php echo base_url(); ?>admin/kick/{playerid}" class="btn btn-xs btn-default">Kick</a>
                                     </div></td>
                             </tr>

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.4
+-- version 4.0.4
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2014 at 02:11 PM
--- Server version: 5.5.24-log
--- PHP Version: 5.5.7
+-- Generation Time: Jun 24, 2014 at 07:26 PM
+-- Server version: 5.6.12-log
+-- PHP Version: 5.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -16,9 +16,20 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
+
+-- --------------------------------------------------------
+
 --
--- Database: `fractalbb`
+-- Table structure for table `bans`
 --
+
+CREATE TABLE IF NOT EXISTS `bans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `player` varchar(32) NOT NULL,
+  `admin` varchar(32) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -33,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `timestamp` datetime NOT NULL,
   `post_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `comments`
@@ -75,14 +86,15 @@ CREATE TABLE IF NOT EXISTS `forum_content` (
   `forum_id` int(11) NOT NULL,
   `views` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `forum_content`
 --
 
 INSERT INTO `forum_content` (`id`, `author`, `content`, `topic_id`, `forum_id`, `views`) VALUES
-(1, 'Howelley', 'Welcome to your first test forum post!', 1, 1, 0);
+(1, 'Howelley', 'Welcome to your first test forum post!', 1, 1, 0),
+(12, 'admin', '<p>My test reply!</p>\r\n', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -122,14 +134,27 @@ CREATE TABLE IF NOT EXISTS `forum_posts` (
   `forum_id` int(11) NOT NULL,
   `views` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `forum_posts`
 --
 
 INSERT INTO `forum_posts` (`id`, `name`, `author`, `timestamp`, `pinned`, `forum_id`, `views`) VALUES
-(1, 'This is a test post', 'Howelley', '2014-01-27 19:44:58', 0, 1, 68);
+(1, 'This is a test post', 'Admin', '2014-01-27 19:44:58', 0, 1, 78),
+(10, 'My post!', 'Connor_Howell', '2014-06-24 20:25:00', 0, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_session`
+--
+
+CREATE TABLE IF NOT EXISTS `login_session` (
+  `username` varchar(64) NOT NULL,
+  `login_token` varchar(64) NOT NULL,
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -151,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
 --
 
 INSERT INTO `posts` (`id`, `title`, `author`, `timestamp`, `content`) VALUES
-(1, 'Welcome to FractalBB ', 'Admin', '2014-01-19', '<p><img src="/templates/default/images/blog_image1.png" class="img-responsive" /></p>\n\n<hr />\n<p>Welcome to FractalBB, The complete Content Management System and Bulletin Board software for SA:MP. With complete RCON support!</p>\n');
+(1, 'Welcome to FractalBB ', 'Admin', '2014-01-19', '<p><img src="http://www.fractal-hub.com/screenshots/blog_image1.png" class="img-responsive" /></p>\n\n<hr />\n<p>Welcome to FractalBB, The complete Content Management System and Bulletin Board software for SA:MP. With complete RCON support!</p>\n');
 
 -- --------------------------------------------------------
 
@@ -164,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(32) NOT NULL,
   `password` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
-  `admin` int(11) NOT NULL,
+  `Admin` int(11) NOT NULL,
   `money` int(11) NOT NULL,
   `kills` int(11) NOT NULL,
   `forum_rank` int(11) NOT NULL,
@@ -172,22 +197,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `signature` varchar(512) NOT NULL,
   `admin-dismiss` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `email`, `admin`, `money`, `kills`, `forum_rank`, `login_token`, `signature`, `admin-dismiss`) VALUES
-(1, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'admin@admin.com', 1, 2000, 1, 5, 'HtMCDc0GHxbA3Nssvsrn3cdrNl4968JP', '<p><img alt="" src="http://www.fractal-hub.com/logo.png" /><br />\n<em>Out now! |&nbsp;<a href="http://www.fractal-hub.com/" target="_blank">Website</a>&nbsp;(WIP, Client portal still not finished!)</em></p>\n', 0);
-
-CREATE TABLE IF NOT EXISTS `bans` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `player` varchar(32) NOT NULL,
-  `admin` varchar(32) NOT NULL,
-  `timestamp` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `Admin`, `money`, `kills`, `forum_rank`, `login_token`, `signature`, `admin-dismiss`) VALUES
+(1, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'admin@domain.com', 1, 2000, 1, 5, 'oXXfReaFrO4BkFy0ymtntu3wsfm2wKei', '<p><img alt="" src="http://www.fractal-hub.com/logo.png" /><br />\n<em>Out now! |&nbsp;<a href="http://www.fractal-hub.com/" target="_blank">Website</a>&nbsp;(WIP, Client portal still not finished!)</em></p>\n', 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -2,16 +2,32 @@
 
 //Site
 
-$config['template'] = 'default';
-$config['site_title'] = '%NAME%';
-$config['site_heading'] = '%HEADING%';
-$config['license_key'] = '%LICENSE_KEY%';
+$config['template'] = '';
+$config['site_title'] = '';
+$config['site_heading'] = '';
+$config['license_key'] = '';
 
 //Server
 
-$config['server_ip'] = '%SERVER_IP%';
-$config['server_port'] = '%SERVER_PORT%';
-$config['rcon_password'] = '%RCON_PASSWORD%';
+$config['server_ip'] = '';
+$config['server_port'] = '';
+$config['rcon_password'] = '';
+
+//Account Hook
+
+$config['acc_method'] = '';
+$config['acc_enc'] = '';
+
+//FTP for INI
+
+$config['acc_dir'] = '';
+$config['main_tag'] = '';
+$config['pass_tag'] = '';
+$config['kill_tag'] = '';
+$config['cash_tag'] = '';
+$config['ftp_ip'] = '';
+$config['ftp_user'] = '';
+$config['ftp_pass'] = '';
 
 /* End of file general.php */
 /* Location: ./application/config/general.php */

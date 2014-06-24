@@ -1,5 +1,5 @@
 <?php
-    if (get_cookie('token') == FALSE || $this->user_model->getDetails(get_cookie('token'))[0]['admin'] < 1) {
+    if (get_cookie('token') == FALSE || $this->user_model->getDetails(get_cookie('token'))['Admin'] < 1) {
               redirect('/','refresh');
             } 
 ?>
@@ -34,6 +34,10 @@
     <!-- SB Admin CSS - Include with every page -->
     <link href="{template_dir}css/sb-admin.css" rel="stylesheet">
 
+    <link rel="stylesheet" type="text/css" href="{template_dir}css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="{template_dir}css/component.css" />
+    <script src="{template_dir}js/modernizr.custom.js"></script>
+
 </head>
 
 <body>
@@ -58,9 +62,7 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                    {userdata}
                         <li><a href="<?php echo base_url(); ?>ucp/viewuser/{username}"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                    {/userdata}
                         </li>
                         <li><a href="<?php echo base_url(); ?>admin/options"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
@@ -136,6 +138,9 @@
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="<?php echo base_url(); ?>admin/bans">Manage Bans</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>admin/account">Account Setup</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->

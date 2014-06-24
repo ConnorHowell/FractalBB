@@ -6,7 +6,6 @@
             </ol>
           </div>
         </div><!-- /.row -->
-        {userdata}
         <div class="row">
           <div class="col-lg-4 animated bounceIn">
             <div class="panel panel-info">
@@ -70,7 +69,7 @@
                     <i class="fa fa-money fa-5x"></i>
                   </div>
                   <div class="col-xs-6 text-right">
-                    <p class="announcement-heading">${money}</p>
+                    <p class="announcement-heading">${cash}</p>
                     <p class="announcement-text">Money</p>
                   </div>
                 </div>
@@ -78,8 +77,7 @@
             </div>
           </div>
         </div><!-- /.row -->
-        {/userdata}
-
+        <div class="row">
         <div class="col-lg-4">
             <div class="panel panel-primary">
               <div class="panel-heading">
@@ -100,3 +98,24 @@
               </div>
             </div>
           </div>
+          <div class="col-lg-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-clock-o"></i> Recent Forum Posts</h3>
+              </div>
+              <div class="panel-body">
+                <div class="list-group">
+                {latest_forum_posts}
+                  <a href="<?php echo base_url(); ?>forum/" class="list-group-item">
+                    <span class="badge">{timestamp}</span>
+                     {name}
+                  </a>
+                {/latest_forum_posts}
+                </div>
+                <div class="text-right">
+                  <a href="<?php echo base_url(); ?>">View All Posts <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>

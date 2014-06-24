@@ -46,12 +46,11 @@
           </button>
           <a class="navbar-brand" href="<?php echo base_url(); ?>">{blog_title}</a>
         </div>
-        {userdata}
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav side-nav">
             <li><a href="<?php echo base_url(); ?>ucp/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <?php if (get_cookie('token') !== FALSE && $userdata[0]['admin'] > 0) {
+            <?php if (get_cookie('token') !== FALSE && $userdata['Admin'] > 0) {
                         echo '<li><a href="'.base_url().'admin"><i class="fa fa-home"></i> Admin</a></li>';
                     } ?>
             <li><a href="<?php echo base_url(); ?>ucp/editsignature"><i class="fa fa-pencil"></i> Edit Signature</a></li>
@@ -78,5 +77,4 @@
           </ul>
         </div><!-- /.navbar-collapse -->
       </nav>
-{/userdata}
       <div id="page-wrapper">

@@ -23,15 +23,27 @@
         <!-- /well -->
         <?php } 
         else {
+            $user = $this->user_model->getDetails(get_cookie('token'));
+            $username = $this->user_model->userFromToken(get_cookie('token'));
+            if ($this->config->item('acc_method') == 'FTP') {
+                $kills = $user[$this->config->item('kill_tag')];
+            }
+            elseif ($this->config->item('acc_method') == 'MySQL') {
+                $kills = $user['kills'];
+            }
+
+            if ($this->config->item('acc_method') == 'FTP') {
+                $cash = $user[$this->config->item('cash_tag')];
+            }
+            elseif ($this->config->item('acc_method') == 'MySQL') {
+                $cash = $user['money'];
+        }
         ?>
-        {userdata}
         <div class="well">
-            <h4>{username}</h4><hr>
-            <h5>Money: {money}</h5>
-            <h5>Kills: {kills}</h5>
-            <h5>Rank: {forum_rank}</h5><hr>
+            <h4><?php echo $username; ?></h4><hr>
+            <h5>Money: <?php echo number_format($cash); ?></h5>
+            <h5>Kills: <?php echo $kills; ?></h5><hr>
             <a href="<?php echo base_url(); ?>ucp/logout" class="btn btn-outline btn-warning btn-block">Logout</a>
         </div>
-        {/userdata}
         <!-- /well -->
         <?php } ?>

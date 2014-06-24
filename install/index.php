@@ -126,12 +126,57 @@ if($_POST) {
                         <!-- Advanced Wizard Content -->
                         <form id="advanced-wizard" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal">
                             <!-- First Step -->
+                            
                             <div id="advanced-first" class="step">
                                 <!-- Step Info -->
                                 <div class="wizard-steps">
                                     <div class="row">
-                                        <div class="col-xs-6 text-center active">1. Database</div>
-                                        <div class="col-xs-6 text-center">2. Server Info</div>
+                                        <div class="col-xs-4 text-center active">1. Introduction</div>
+                                        <div class="col-xs-4 text-center">2. Database</div>
+                                        <div class="col-xs-4 text-center">3. Server Info</div>
+                                    </div>
+                                </div>
+                                <!-- END Step Info -->
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Introduction</label>
+                                    <div class="col-md-10">
+                                        <p class="form-control-static">Welcome to the FractalBB installer! We'd like to take this opportunity the thank you for downloading and trying out the software, we hope you use it for your upcoming project! If you have yet to sort out hosting for your server we'd like to point you towards our free SA:MP hosting service where more information can be found on our site. Furthermore we provide competitively price domains alongside web hosting which would act as a great platform for hosting the perfect FractalBB installation!<p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Prerequisites</label>
+                                    <div class="col-md-10">
+                                        <p class="form-control-static">There is a few things you'll need to check before using the software, we've taken the liberty of checking to see if the software will work or not.<br><hr>PHP Version 5.1.6 or above: <?php if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION >= 5) 
+{
+  echo '<span class="text-success">Installed</span>';
+} else 
+{
+  echo '<span class="text-danger">You need to upgrade PHP</span>';
+} ?>
+<br>
+MySQL (PHP Module): <?php if(extension_loaded("mysql") == true) {echo '<span class="text-success">Installed</span>';} else {echo '<span class="text-danger">You need to install MySQL for PHP</span>';} ?> 
+<br>
+Mod_Rewrite (PHP Module): <?php if(in_array('mod_rewrite', apache_get_modules())) {echo '<span class="text-success">Installed</span>';} else {echo '<span class="text-danger">You need to install mod_rewrite for PHP</span>';} ?> 
+<br>
+application/config/database.php writable?: <?php if(is_writable('../application/config/database.php')) {echo '<span class="text-success">Yes</span>';} else {echo '<span class="text-danger">No</span>';} ?> 
+<br>
+application/config/general.php writable?: <?php if(is_writable('../application/config/general.php')) {echo '<span class="text-success">Yes</span>';} else {echo '<span class="text-danger">No</span>';} ?> 
+<br>
+Rename .htaccess: <?php if(file_exists('../.htaccess')) {echo '<span class="text-success">.htaccess running</span>';} else {echo '<span class="text-danger">No, change the text file to .htaccess only.</span>';} ?> 
+
+                                        <p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END First Step -->
+                            
+                            <div id="advanced-second" class="step">
+                                <!-- Step Info -->
+                                <div class="wizard-steps">
+                                    <div class="row">
+                                        <div class="col-xs-4 text-center done">1. Introduction <i class="fa fa-check"></i></div>
+                                        <div class="col-xs-4 text-center active">2. Database</div>
+                                        <div class="col-xs-4 text-center">3. Server Info</div>
                                     </div>
                                 </div>
                                 <!-- END Step Info -->
@@ -154,11 +199,11 @@ if($_POST) {
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-2" for="val_password">Password *</label>
+                                    <label class="control-label col-md-2" for="val_password">Password</label>
                                     <div class="col-md-3">
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-asterisk fa-fw"></i></span>
-                                            <input type="password" id="val_password" name="val_password" class="form-control" required>
+                                            <input type="password" id="val_password" name="val_password" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -175,12 +220,13 @@ if($_POST) {
                             <!-- END First Step -->
 
                             <!-- Second Step -->
-                            <div id="advanced-second" class="step">
+                            <div id="advanced-third" class="step">
                                 <!-- Step Info -->
                                 <div class="wizard-steps">
                                     <div class="row">
-                                        <div class="col-xs-6 text-center done">1. Database <i class="fa fa-check"></i></div>
-                                        <div class="col-xs-6 text-center active">2. Server Info</div>
+                                        <div class="col-xs-4 text-center done">1. Introduction <i class="fa fa-check"></i></div>
+                                        <div class="col-xs-4 text-center done">2. Database <i class="fa fa-check"></i></div>
+                                        <div class="col-xs-4 text-center active">3. Server Info</div>
                                     </div>
                                 </div>
                                 <!-- END Step Info -->
@@ -230,15 +276,6 @@ if($_POST) {
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="val_license_key">License Key</label>
-                                    <div class="col-md-3">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-shield fa-fw"></i></span>
-                                            <input type="text" id="val_license_key" name="val_license_key" class="form-control" placeholder="You obtained this from FractalHub, check your emails!" required>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <!-- END Second Step -->
 
@@ -310,13 +347,7 @@ if($_POST) {
                             },
                             val_hostname: {
                                 required: true,
-                            },
-                            val_password: {
-                                required: true,
-                            },
-                            val_license_key: {
-                                required: true,
-                            },
+                            }
                         },
                         messages: {
                             val_username: {
@@ -324,12 +355,6 @@ if($_POST) {
                             },
                             val_hostname: {
                                 required: 'Please enter a hostanme',
-                            },
-                            val_password: {
-                                required: 'Please provide a password',
-                            },
-                            val_license_key: {
-                            	required: 'Please put in a license key',
                             }
                         }
                     },
